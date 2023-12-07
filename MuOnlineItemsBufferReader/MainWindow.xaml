@@ -5,21 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MuOnlineItemsBufferReader"
         mc:Ignorable="d"
-        Title="Items buffer reader" Height="550" Width="1400">
-    <Grid>
+        Title="Items buffer reader" Height="550" Width="1900" d:DataContext="{d:DesignData MainWindowViewModel}">
+    <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Column="0" Text="{Binding Input, Mode=TwoWay}"
-                 Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"></TextBox>
-        <Button Grid.Column="1" Command="{Binding ConvertCommand}"
-                Height="50" Width="120" Content="Read ->"></Button>
+        <Grid Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Input" />
+            <TextBox Grid.Row="1" Text="{Binding Input, Mode=TwoWay}"
+                     Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"></TextBox>
+        </Grid>
+        
+        <Button Grid.Column="2" Command="{Binding ConvertCommand}"
+                Height="35" Width="80" Content="Read ->"></Button>
 
-        <TextBox Grid.Column="2" Text="{Binding Output, Mode=TwoWay}"
-                 FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
-                 Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
+        <Grid Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Hexadecimal values" />
+            <TextBox Grid.Row="1" Text="{Binding OutputHex, Mode=TwoWay}"
+                     FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
+                     Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
+
+            <Label Grid.Row="2" Content="Decimal values" />
+            <TextBox Grid.Row="3" Text="{Binding OutputDec, Mode=TwoWay}"
+                     FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
+                     Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
+        </Grid>
     </Grid>
 </Window>

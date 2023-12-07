@@ -7,7 +7,8 @@ namespace MuOnlineItemsBufferReader
     public class MainWindowViewModel : ViewModelBase
     {
         private string input = string.Empty;
-        private string output = string.Empty;
+        private string outputHex = string.Empty;
+        private string outputDec = string.Empty;
 
         public RelayCommand ConvertCommand { get; }
 
@@ -21,13 +22,24 @@ namespace MuOnlineItemsBufferReader
             }
         }
 
-        public string Output
+        public string OutputHex
         {
-            get => output;
+            get => outputHex;
             set
             {
-                output = value;
-                RaisePropertyChanged(() => Output);
+                outputHex = value;
+                RaisePropertyChanged(() => OutputHex);
+            }
+        }
+
+
+        public string OutputDec
+        {
+            get => outputDec;
+            set
+            {
+                outputDec = value;
+                RaisePropertyChanged(() => OutputDec);
             }
         }
 
@@ -40,7 +52,11 @@ namespace MuOnlineItemsBufferReader
         private void ConvertAction()
         {
             var converter = new InventoryConverter();
-            Output = converter.Convert(Input, 25);
+
+            const int itemUint8Size = 25;
+
+            OutputHex = converter.Convert(Input, itemUint8Size);
+            OutputDec = converter.Convert(Input, itemUint8Size, true);
         }
     }
 }

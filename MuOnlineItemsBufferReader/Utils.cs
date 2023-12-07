@@ -15,5 +15,10 @@ namespace MuOnlineItemsBufferReader
 
             return bytes;
         }
+
+        public static string HexToDec(string hex)
+        {
+            return int.Parse(hex, System.Globalization.NumberStyles.HexNumber).ToString();
+        }
     }
 }

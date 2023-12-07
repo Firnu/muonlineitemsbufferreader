@@ -6,7 +6,7 @@ namespace MuOnlineItemsBufferReader.Converters
 {
     internal class InventoryConverter : IBufferConverter
     {
-        public string Convert(string input, int itemSizeUInt8)
+        public string Convert(string input, int itemSizeUInt8, bool convertValueToDec = false)
         {
             if (input.StartsWith("0x"))
             {
@@ -18,7 +18,8 @@ namespace MuOnlineItemsBufferReader.Converters
             var itemSize = itemSizeUInt8 * 2;
 
             outputString.Append(
-                $"ID\tLvl\tDur\tSerial\tExc\tAnc\tSegm.\tPink\tHarm.\tS1\tS2\tS3\tS4\tS5" + Environment.NewLine);
+                $"ID\t\tLvl+S+L\t\tDur.\t\tSerial\t\t\tExc\t\tAnc\t\tSegment\t\tPink\t\tHarmony\t\tSocOpt\t\tSoc1\t\tSoc2\t\tSoc3\t\tSoc4\t\tSoc5\t\tOther" +
+                Environment.NewLine);
 
             for (var i = 0; i < input.Length; i += itemSize)
             {
@@ -50,12 +51,25 @@ namespace MuOnlineItemsBufferReader.Converters
                 Reduce(ref buildLine, ref rawLine, 2);
                 Reduce(ref buildLine, ref rawLine, 2);
                 Reduce(ref buildLine, ref rawLine, 2);
-                Reduce(ref buildLine, ref rawLine, rawLine.Length);
+                Reduce(ref buildLine, ref rawLine, 2);
+                Reduce(ref buildLine, ref rawLine, rawLine.Length, true);
 
-                void Reduce(ref string builtLine, ref string raw, int shift)
+                void Reduce(ref string builtLine, ref string raw, int shift, bool skipIndent = false)
                 {
-                    builtLine += raw[..shift];
-                    builtLine += "\t";
+                    var value = raw[..shift];
+
+                    if (shift <= 2 && convertValueToDec)
+                    {
+                        value = Utils.HexToDec(value);
+                    }
+
+                    builtLine += value;
+
+                    if (!skipIndent)
+                    {
+                        builtLine += "\t\t";
+                    }
+                    
                     raw = raw.Remove(0, shift);
                 }
                 
