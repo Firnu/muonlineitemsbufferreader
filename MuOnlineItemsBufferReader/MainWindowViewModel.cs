@@ -9,6 +9,7 @@ namespace MuOnlineItemsBufferReader
         private string input = string.Empty;
         private string outputHex = string.Empty;
         private string outputDec = string.Empty;
+        private string outputBits = string.Empty;
 
         public RelayCommand ConvertCommand { get; }
 
@@ -43,6 +44,15 @@ namespace MuOnlineItemsBufferReader
             }
         }
 
+        public string OutputBits
+        {
+            get => outputBits;
+            set
+            {
+                outputBits = value;
+                RaisePropertyChanged(() => OutputBits);
+            }
+        }
 
         public MainWindowViewModel()
         {
@@ -55,8 +65,9 @@ namespace MuOnlineItemsBufferReader
 
             const int itemUint8Size = 25;
 
-            OutputHex = converter.Convert(Input, itemUint8Size);
-            OutputDec = converter.Convert(Input, itemUint8Size, true);
+            OutputHex = converter.Convert(Input, itemUint8Size, ValueFormat.Hex);
+            OutputDec = converter.Convert(Input, itemUint8Size, ValueFormat.Dec);
+            OutputBits = converter.Convert(Input, itemUint8Size, ValueFormat.Bit);
         }
     }
 }

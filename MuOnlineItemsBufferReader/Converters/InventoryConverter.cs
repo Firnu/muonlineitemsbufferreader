@@ -6,7 +6,7 @@ namespace MuOnlineItemsBufferReader.Converters
 {
     internal class InventoryConverter : IBufferConverter
     {
-        public string Convert(string input, int itemSizeUInt8, bool convertValueToDec = false)
+        public string Convert(string input, int itemSizeUInt8, ValueFormat valueFormat)
         {
             if (input.StartsWith("0x"))
             {
@@ -17,8 +17,40 @@ namespace MuOnlineItemsBufferReader.Converters
 
             var itemSize = itemSizeUInt8 * 2;
 
+            var headlineSpacing = valueFormat switch
+            {
+                ValueFormat.Hex => "\t\t",
+                ValueFormat.Dec => "\t\t",
+                ValueFormat.Bit => "            ",
+                _ => throw new ArgumentOutOfRangeException(nameof(valueFormat), valueFormat, null)
+            };
+
+            var valueSpacing = valueFormat switch
+            {
+                ValueFormat.Hex => "\t\t",
+                ValueFormat.Dec => "\t\t",
+                ValueFormat.Bit => "\t",
+                _ => throw new ArgumentOutOfRangeException(nameof(valueFormat), valueFormat, null)
+            };
+
+            var serialHeadline = valueFormat == ValueFormat.Bit ? "Serial" : "ItemSerial";
+
             outputString.Append(
-                $"ID\t\tLvl+S+L\t\tDur.\t\tSerial\t\t\tExc\t\tAnc\t\tSegment\t\tPink\t\tHarmony\t\tSocOpt\t\tSoc1\t\tSoc2\t\tSoc3\t\tSoc4\t\tSoc5\t\tOther" +
+                $"ID{headlineSpacing}" +
+                $"Lvl{headlineSpacing}" +
+                $"Dur.{headlineSpacing}" +
+                $"{serialHeadline}{headlineSpacing}" +
+                $"Exc{headlineSpacing}" +
+                $"Anc{headlineSpacing}" +
+                $"Seg{headlineSpacing}" +
+                $"Pink{headlineSpacing}" +
+                $"HrmSocO{headlineSpacing}" +
+                $"Soc1{headlineSpacing}" +
+                $"Soc2{headlineSpacing}" +
+                $"Soc3{headlineSpacing}" +
+                $"Soc4{headlineSpacing}" +
+                $"Soc5{headlineSpacing}" +
+                $"Other" +
                 Environment.NewLine);
 
             for (var i = 0; i < input.Length; i += itemSize)
@@ -51,23 +83,25 @@ namespace MuOnlineItemsBufferReader.Converters
                 Reduce(ref buildLine, ref rawLine, 2);
                 Reduce(ref buildLine, ref rawLine, 2);
                 Reduce(ref buildLine, ref rawLine, 2);
-                Reduce(ref buildLine, ref rawLine, 2);
                 Reduce(ref buildLine, ref rawLine, rawLine.Length, true);
 
                 void Reduce(ref string builtLine, ref string raw, int shift, bool skipIndent = false)
                 {
                     var value = raw[..shift];
 
-                    if (shift <= 2 && convertValueToDec)
+                    value = valueFormat switch
                     {
-                        value = Utils.HexToDec(value);
-                    }
-
+                        ValueFormat.Hex => value,
+                        ValueFormat.Dec => shift <= 2 ? Utils.HexToDec(value) : value,
+                        ValueFormat.Bit => shift <= 2 ? Utils.ConvertHexToBitArray(value).PrintBits() : value,
+                        _ => throw new ArgumentOutOfRangeException(nameof(valueFormat), valueFormat, null)
+                    };
+                    
                     builtLine += value;
 
                     if (!skipIndent)
                     {
-                        builtLine += "\t\t";
+                        builtLine += valueSpacing;
                     }
                     
                     raw = raw.Remove(0, shift);

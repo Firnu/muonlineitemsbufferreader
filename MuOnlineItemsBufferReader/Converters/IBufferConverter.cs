@@ -2,6 +2,6 @@
 {
     public interface IBufferConverter
     {
-        public string Convert(string input, int itemSizeUInt8, bool convertValueToDec = false);
+        public string Convert(string input, int itemSizeUInt8, ValueFormat valueFormat);
     }
 }
