@@ -16,26 +16,28 @@ namespace MuOnlineItemsBufferReader.Converters
             var outputString = new StringBuilder();
 
             var itemSize = itemSizeUInt8 * 2;
-
-            var serialHeadline = valueFormat == ValueFormat.Bit ? "Serial" : "ItemSerial";
-
+            
             var column = BuildColumnString();
-            outputString.Append(BuildColumnEntry(column, "ID"));
-            outputString.Append(BuildColumnEntry(column, "Lvl|Skl|Lck"));
-            outputString.Append(BuildColumnEntry(column, "Dur."));
-            outputString.Append(BuildColumnEntry(column, "Serial"));
-            outputString.Append(BuildColumnEntry(column, "Exc"));
-            outputString.Append(BuildColumnEntry(column, "Anc"));
-            outputString.Append(BuildColumnEntry(column, "Segment"));
-            outputString.Append(BuildColumnEntry(column, "Pink"));
-            outputString.Append(BuildColumnEntry(column, "Hrm|SOpt"));
-            outputString.Append(BuildColumnEntry(column, "Soc1"));
-            outputString.Append(BuildColumnEntry(column, "Soc2"));
-            outputString.Append(BuildColumnEntry(column, "Soc3"));
-            outputString.Append(BuildColumnEntry(column, "Soc4"));
-            outputString.Append(BuildColumnEntry(column, "Soc5"));
-            outputString.Append(BuildColumnEntry(column, "Other"));
-            outputString.Append(Environment.NewLine);
+
+            if (valueFormat != ValueFormat.Raw)
+            {
+                outputString.Append(BuildColumnEntry(column, "ID"));
+                outputString.Append(BuildColumnEntry(column, "Lvl|Skl|Lck"));
+                outputString.Append(BuildColumnEntry(column, "Dur."));
+                outputString.Append(BuildColumnEntry(column, "Serial"));
+                outputString.Append(BuildColumnEntry(column, "Exc"));
+                outputString.Append(BuildColumnEntry(column, "Anc"));
+                outputString.Append(BuildColumnEntry(column, "Segment"));
+                outputString.Append(BuildColumnEntry(column, "Pink"));
+                outputString.Append(BuildColumnEntry(column, "Hrm|SOpt"));
+                outputString.Append(BuildColumnEntry(column, "Soc1"));
+                outputString.Append(BuildColumnEntry(column, "Soc2"));
+                outputString.Append(BuildColumnEntry(column, "Soc3"));
+                outputString.Append(BuildColumnEntry(column, "Soc4"));
+                outputString.Append(BuildColumnEntry(column, "Soc5"));
+                outputString.Append(BuildColumnEntry(column, "Other"));
+                outputString.Append(Environment.NewLine);
+            }
 
             for (var i = 0; i < input.Length; i += itemSize)
             {
@@ -76,12 +78,13 @@ namespace MuOnlineItemsBufferReader.Converters
                     value = valueFormat switch
                     {
                         ValueFormat.Hex => value,
+                        ValueFormat.Raw => value,
                         ValueFormat.Dec => shift <= 2 ? Utils.HexToDec(value) : value,
                         ValueFormat.Bit => shift <= 2 ? Utils.ConvertHexToBitArray(value).PrintBits() : value,
                         _ => throw new ArgumentOutOfRangeException(nameof(valueFormat), valueFormat, null)
                     };
 
-                    var columnEntry = lastEntry ? value : BuildColumnEntry(column, value);
+                    var columnEntry = lastEntry || valueFormat == ValueFormat.Raw ? value : BuildColumnEntry(column, value);
                     outputString.Append(columnEntry); ;
                     raw = raw.Remove(0, shift);
                 }

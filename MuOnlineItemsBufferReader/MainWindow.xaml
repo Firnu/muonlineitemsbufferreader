@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MuOnlineItemsBufferReader"
         mc:Ignorable="d"
-        Title="Items buffer reader" Height="650" Width="1900" d:DataContext="{d:DesignData MainWindowViewModel}">
+        Title="Items buffer reader" Height="650" Width="1485" d:DataContext="{d:DesignData MainWindowViewModel}">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
@@ -36,19 +36,27 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="Hexadecimal values" />
-            <TextBox Grid.Row="1" Text="{Binding OutputHex, Mode=TwoWay}"
+
+            <Label Grid.Row="0" Content="Raw lines" />
+            <TextBox Grid.Row="1" Text="{Binding OutputRaw, Mode=TwoWay}"
                      FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
                      Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
 
-            <Label Grid.Row="2" Content="Decimal values" />
-            <TextBox Grid.Row="3" Text="{Binding OutputDec, Mode=TwoWay}"
+            <Label Grid.Row="2" Content="Hexadecimal values" />
+            <TextBox Grid.Row="3" Text="{Binding OutputHex, Mode=TwoWay}"
                      FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
                      Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
 
-            <Label Grid.Row="4" Content="Binary values" />
-            <TextBox Grid.Row="5" Text="{Binding OutputBits, Mode=TwoWay}"
+            <Label Grid.Row="4" Content="Decimal values" />
+            <TextBox Grid.Row="5" Text="{Binding OutputDec, Mode=TwoWay}"
+                     FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
+                     Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
+
+            <Label Grid.Row="6" Content="Binary values" />
+            <TextBox Grid.Row="7" Text="{Binding OutputBits, Mode=TwoWay}"
                      FontStretch="UltraExpanded" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
                      Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"></TextBox>
         </Grid>
